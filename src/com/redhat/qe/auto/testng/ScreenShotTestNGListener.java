@@ -1,4 +1,4 @@
-package com.redhat.qe.auto.selenium;
+package com.redhat.qe.auto.testng;
 
 import java.util.logging.Level;
 
@@ -7,7 +7,9 @@ import org.testng.ITestResult;
 import org.testng.Reporter;
 import org.testng.internal.IResultListener;
 
-import com.redhat.qe.auto.testng.LogMessageUtil;
+import com.redhat.qe.jul.TestRecords;
+import com.redhat.qe.auto.selenium.ITestNGScreenCapture;
+import com.redhat.qe.auto.selenium.IScreenCapture;
 
 
 /**
@@ -20,12 +22,12 @@ import com.redhat.qe.auto.testng.LogMessageUtil;
  * @author jweiss
  *
  */
-public class TestNGListener extends com.redhat.qe.auto.testng.TestNGListener implements IResultListener, ISuiteListener {
+public class ScreenShotTestNGListener extends TestNGListener implements IResultListener, ISuiteListener {
 
 	private static IScreenCapture sc = null;
 	
 	public static void setScreenCaptureUtility(IScreenCapture sc){
-		TestNGListener.sc = sc;
+		ScreenShotTestNGListener.sc = sc;
 	}
 
 	
@@ -61,11 +63,11 @@ public class TestNGListener extends com.redhat.qe.auto.testng.TestNGListener imp
 	
 	protected void screencap(ITestResult result) throws Exception{
 		if (sc==null) {
-			log.log(Level.WARNING, "No ScreenCaptureUtility has been set.", LogMessageUtil.Style.Banner);
+			log.log(Level.WARNING, "No ScreenCaptureUtility has been set.", TestRecords.Style.Banner);
 			return;
 		}
 		if (sc instanceof ITestNGScreenCapture){
-			((ITestNGScreenCapture) sc).testNGScreenCapture(result);
+			((ITestNGScreenCapture) sc).testNGScreenCapture(result.getClass().getName(), result.getMethod().getMethodName());
 		}
 		else sc.screenCapture();
 	}

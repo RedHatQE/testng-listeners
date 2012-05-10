@@ -16,6 +16,8 @@ import org.testng.Reporter;
 import org.testng.SkipException;
 import org.testng.internal.IResultListener;
 
+import com.redhat.qe.jul.TestRecords;
+
 import com.redhat.qe.auto.tcms.ImplementsNitrateTest;
 
 
@@ -38,12 +40,12 @@ public class TestNGListener implements IResultListener, ISuiteListener {
 
 	@Override
 	public void onFinish(ITestContext context){
-		log.log(Level.INFO, "Finished TestNG Script: " + context.getName(), LogMessageUtil.Style.Banner);
+		log.log(Level.INFO, "Finished TestNG Script: " + context.getName(), TestRecords.Style.Banner);
 	}
 	
 	@Override
 	public void onStart(ITestContext context) {
-		log.log(Level.INFO, "Starting TestNG Script: " + context.getName(), LogMessageUtil.Style.Banner);
+		log.log(Level.INFO, "Starting TestNG Script: " + context.getName(), TestRecords.Style.Banner);
 	}
 	
 	@Override
@@ -58,7 +60,7 @@ public class TestNGListener implements IResultListener, ISuiteListener {
 		LogRecord logRecord = new LogRecord(Level.SEVERE, "Test Failed: "+ result.getName());
 		logRecord.setThrown(err);
 		if (err != null && err instanceof AssertionError)
-			logRecord.setParameters(new Object[] {LogMessageUtil.Style.AssertFailed});
+			logRecord.setParameters(new Object[] {TestRecords.Style.AssertFailed});
 		log.log(logRecord);
 	}
 	
@@ -67,11 +69,11 @@ public class TestNGListener implements IResultListener, ISuiteListener {
 		Reporter.setCurrentTestResult(result);
 		if (result.getThrowable() != null){
 			LogRecord r= new LogRecord(Level.INFO,  "Skipping test " + result.getName() + ": " + result.getThrowable().getMessage());
-			r.setParameters(new Object[]{LogMessageUtil.Style.Banner});
+			r.setParameters(new Object[]{TestRecords.Style.Banner});
 			log.log(r);
 		}
 		else {
-			log.log(Level.INFO, "Skipping Test " + result.getName() + ":  Unsatisfied dependency", LogMessageUtil.Style.Banner);
+			log.log(Level.INFO, "Skipping Test " + result.getName() + ":  Unsatisfied dependency", TestRecords.Style.Banner);
 		}
 	}
 	
@@ -79,7 +81,7 @@ public class TestNGListener implements IResultListener, ISuiteListener {
 	public  void onTestStart(ITestResult result) {
 		Reporter.setCurrentTestResult(result);
 		LogRecord r= new LogRecord(Level.INFO, String.format("Starting Test: %s%s", result.getName(), getParameters(result)));
-		r.setParameters(new Object[]{LogMessageUtil.Style.Banner, LogMessageUtil.Style.StartTest});
+		r.setParameters(new Object[]{TestRecords.Style.Banner, TestRecords.Style.StartTest});
 		log.log(r);
 				
 		// embed an entry in the log to the corresponding Nitrate test case
@@ -117,9 +119,9 @@ public class TestNGListener implements IResultListener, ISuiteListener {
 		Reporter.setCurrentTestResult(result);
 		Throwable throwable = result.getThrowable();
 		if (throwable != null){
-			log.log(Level.INFO, "Expected exception of " + throwable.getClass().getName() + " '" + throwable.getMessage() + "' was in fact thrown." , LogMessageUtil.Style.Asserted);
+			log.log(Level.INFO, "Expected exception of " + throwable.getClass().getName() + " '" + throwable.getMessage() + "' was in fact thrown." , TestRecords.Style.Asserted);
 		}
-		log.log(Level.INFO, String.format("Test Passed: %s%s", result.getName(), getParameters(result)), LogMessageUtil.Style.Banner);
+		log.log(Level.INFO, String.format("Test Passed: %s%s", result.getName(), getParameters(result)), TestRecords.Style.Banner);
 	}
 
 	@Override
@@ -133,28 +135,28 @@ public class TestNGListener implements IResultListener, ISuiteListener {
 		Reporter.setCurrentTestResult(result);
 		if (result.getThrowable() != null){
 			LogRecord r= new LogRecord(Level.INFO,  "Skipping configuration " + result.getName() + ": " + result.getThrowable().getMessage());
-			r.setParameters(new Object[]{LogMessageUtil.Style.Banner});
+			r.setParameters(new Object[]{TestRecords.Style.Banner});
 			log.log(r);
 		}
 		else {
-			log.log(Level.INFO, "Skipping configuration " + result.getName() + ":  Unsatisfied dependency", LogMessageUtil.Style.Banner);
+			log.log(Level.INFO, "Skipping configuration " + result.getName() + ":  Unsatisfied dependency", TestRecords.Style.Banner);
 		}
 	}
 	
 	@Override
 	public void onConfigurationSuccess(ITestResult result) {
 		Reporter.setCurrentTestResult(result);
-		log.log(Level.FINE, "Configuration completed: " + result.getTestClass().getName() + "." + result.getName() , LogMessageUtil.Style.Banner);
+		log.log(Level.FINE, "Configuration completed: " + result.getTestClass().getName() + "." + result.getName() , TestRecords.Style.Banner);
 	}
 
 	@Override
 	public void onFinish(ISuite suite) {
-		log.log(Level.INFO, "Finishing TestNG Suite:" + suite.getName(), LogMessageUtil.Style.Banner);
+		log.log(Level.INFO, "Finishing TestNG Suite:" + suite.getName(), TestRecords.Style.Banner);
 	}
 
 	@Override
 	public void onStart(ISuite suite) {
-		log.log(Level.INFO, "Starting TestNG Suite:" +suite.getName(), LogMessageUtil.Style.Banner);
+		log.log(Level.INFO, "Starting TestNG Suite:" +suite.getName(), TestRecords.Style.Banner);
 	}
 
 	

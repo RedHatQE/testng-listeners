@@ -10,14 +10,13 @@ import org.testng.ITestResult;
 import org.testng.Reporter;
 
 import com.redhat.qe.auto.selenium.ITestNGScreenCapture;
-import com.redhat.qe.auto.selenium.TestNGListener;
 
-public class GnomeTestNGListener extends TestNGListener implements ITestNGScreenCapture{
+public class GnomeTestNGListener extends ScreenShotTestNGListener implements ITestNGScreenCapture{
 	private DateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmmssS");
 
 
 	public GnomeTestNGListener() {
-		TestNGListener.setScreenCaptureUtility(this);
+		ScreenShotTestNGListener.setScreenCaptureUtility(this);
 	}
 	
 	@Override
@@ -27,7 +26,7 @@ public class GnomeTestNGListener extends TestNGListener implements ITestNGScreen
 	}
 
 	@Override
-	public void testNGScreenCapture(ITestResult result) throws Exception {
+	public String testNGScreenCapture(String className, String methodName) throws Exception {
 		String dirName = System.getProperty("selenium.screenshot.dir", System.getProperty("user.dir") + File.separator
 				+ "test-output" + File.separator + "screenshots");
 		
@@ -48,7 +47,7 @@ public class GnomeTestNGListener extends TestNGListener implements ITestNGScreen
 		//Reporter.setCurrentTestResult(result);
 		String screenshotLinkUrl = System.getProperty("selenium.screenshot.link.path", "../screenshots");
 		Reporter.log("<a href='" + String.format("%s/%s", screenshotLinkUrl, outFileName) + "'>Screenshot</a>");
-		
+		return "";
 	}
 
 }

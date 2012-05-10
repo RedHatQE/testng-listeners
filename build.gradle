@@ -1,0 +1,77 @@
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+allprojects {
+    sourceCompatibility = 1.6
+    targetCompatibility = 1.6
+}
+
+group = 'com.redhat.qe'
+version = '1.0.0'
+
+sourceSets {
+    main {
+        java {
+            srcDirs "src"
+        }
+        resources {
+            srcDirs "resources"
+        }
+    }
+}
+
+eclipse {
+    classpath {
+        defaultOutputDir = file('build')
+    }
+}
+
+configurations {
+    deployerJars
+}
+
+repositories {
+    mavenCentral()
+    [
+        'https://repository.jboss.org/nexus/content/repositories/thirdparty-uploads',
+        'http://clojars.org/repo',
+        'http://download.java.net/maven/2/',
+        'http://repository.codehaus.org',
+        'http://snapshots.repository.codehaus.org'
+    ].each { repo ->  
+        maven {
+            url repo
+        }
+    }
+}
+
+dependencies {
+    compile "org.apache.xmlrpc:xmlrpc-common:3.1.3",
+            "com.redhat.qe:xmlrpc-client-tools:1.0.3",
+            "com.redhat.qe:jul.test.records:1.0.1", 
+            "com.redhat.qe:comparisons:1.0.0",
+            "com.redhat.qe:assertions:1.0.2",
+            "com.redhat.qe:tcms-testng:1.0.1",
+            "com.redhat.qe:extended-selenium:1.0.3"
+    deployerJars "org.apache.maven.wagon:wagon-ssh:2.2"
+}
+
+// This doesn't work yet.
+uploadArchives {
+    repositories.mavenDeployer {
+        uniqueVersion = true
+        pom {
+            groupId = 'com.redhat.qe'
+            artifactId = 'tcms'
+            version = '1.0.0-SNAPSHOT'
+        }
+        configuration = configurations.deployerJars
+        repository(url: "scp://clojars.org") {
+            authentication(userName: 'clojars', privateKey: new File('clojars_id_dsa'),passphrase: '')
+        }
+    }
+}
+
+jar {
+}
