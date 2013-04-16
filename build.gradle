@@ -75,3 +75,9 @@ uploadArchives {
 
 jar {
 }
+
+task writeNewPom << {
+    pom {
+    }.writeTo("$buildDir/libs/pom.xml") 
+}
+
