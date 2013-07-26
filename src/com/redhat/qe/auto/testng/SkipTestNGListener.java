@@ -28,8 +28,15 @@ public class SkipTestNGListener implements ITestListener {
 	if (skip!=null) {
 	    if (!isDefault(skip.property())) {
 		String property = System.getProperty(skip.property());
+		// check for null/not-null values if required by annotation
+		if (skip.isNull() && property == null) {
+		    throw new SkipException("Skipped because property ["+skip.property()+"] is NULL");
+		}
+		if (skip.isNotNull() && property != null) {
+		    throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] is not NULL");
+		}
 		if (property == null) {
-		    // we do not care when such property is not defined
+		    // we do not need to care when property is not defined
 		    return;
 		}
 		if (!isDefault(skip.equals())) {
