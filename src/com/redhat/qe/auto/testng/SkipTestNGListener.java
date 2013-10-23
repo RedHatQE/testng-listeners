@@ -27,33 +27,29 @@ public class SkipTestNGListener implements ITestListener {
 	}
 	if (skip!=null) {
 	    if (!isDefault(skip.property())) {
-		String property = System.getProperty(skip.property());
-		// check for null/not-null values if required by annotation
-		if (skip.isNull() && property == null) {
-		    throw new SkipException("Skipped because property ["+skip.property()+"] is NULL");
-		}
-		if (skip.isNotNull() && property != null) {
-		    throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] is not NULL");
-		}
-		if (property == null) {
-		    // we do not need to care when property is not defined
-		    return;
-		}
-		if (!isDefault(skip.equals())) {
-		    if (skip.equals().equals(property)) {
-			throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] equals ["+skip.equals()+"]");
-		    }
-		}
-		if (!isDefault(skip.notEquals())) {
-		    if (!skip.notEquals().equals(property)) {
-			throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] does not equal ["+skip.notEquals()+"]");
-		    }
-		}
-		if (!isDefault(skip.contains())) {
-		    if (property.contains(skip.contains())) {
-			throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] contains ["+skip.contains()+"]");
-		    }
-		}
+    		String property = System.getProperty(skip.property());
+    		// check for null/not-null values if required by annotation
+    		if (skip.isNull() && property == null) {
+    		    throw new SkipException("Skipped because property ["+skip.property()+"] is NULL");
+    		}
+    		if (skip.isNotNull() && property != null) {
+    		    throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] is not NULL");
+    		}
+    		if (!isDefault(skip.equals())) {
+    		    if (skip.equals().equals(property)) {
+    			throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] equals ["+skip.equals()+"]");
+    		    }
+    		}
+    		if (!isDefault(skip.notEquals())) {
+    		    if (!skip.notEquals().equals(property)) {
+    			throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] does not equal ["+skip.notEquals()+"]");
+    		    }
+    		}
+    		if (!isDefault(skip.contains())) {
+    		    if (property.contains(skip.contains())) {
+    			throw new SkipException("Skipped because property ["+skip.property()+"="+property+"] contains ["+skip.contains()+"]");
+    		    }
+    		}
 	    }
  	}
     }
