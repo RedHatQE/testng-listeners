@@ -29,5 +29,16 @@ public class TestNGUtils {
 		}
 		return array;
 	}
+	
+	public static Object[][] convertListObjectTo2dArray(List<Object> list) {
+		if (list.size() == 0) return new Object[0][0]; // avoid a null pointer exception
+		Object[][] array = new Object[list.size()][];
+		int i=0;
+		for (Object item: list){
+			array[i] = new Object[]{item};
+			i++;
+		}
+		return array;
+	}
 
 }
